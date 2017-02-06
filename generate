@@ -2,6 +2,6 @@
 
 cd /home/einst/src/trump-gif
 /home/einst/src/trump-gif/a.out $1 $2 $3
-gifify $3 --colors 255 --compress 100 --fps 10 --resize 300:-1 -o $4
+gifify $3 --colors 255 --compress 100 --fps 10 --resize 250:-1 -o $4
 echo "finish"
 
