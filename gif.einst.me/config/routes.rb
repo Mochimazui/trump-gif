@@ -6,5 +6,6 @@ Rails.application.routes.draw do
   get '/trump/index', to: 'trump#index'
   post '/trump/upload', to: 'trump#upload'
   get '/trump/generate', to: 'trump#generate'
+  get '/trump/recent', to: 'trump#recent'
 
 end

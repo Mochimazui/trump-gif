@@ -31,10 +31,8 @@ class TrumpController < ApplicationController
 
     FileUtils.rm_rf gif_file
 
-    #
     cmd = '/bin/bash /home/einst/src/trump-gif/generate ' + 
       "#{page_1_file} #{page_2_file} #{video_file} #{gif_file}"
-    puts cmd
     spawn(cmd)
 
     redirect_to trump_generate_path(uid: params[:uid])
@@ -42,6 +40,13 @@ class TrumpController < ApplicationController
 
   def generate
     @uid = params[:uid]
+  end
+
+  def recent
+    @files = Dir[Rails.root.join('public', 'gif').to_s + '/*'].sort_by{ |f| File.mtime(f) }
+    @files = @files.last(10) 
+    @files = @files.collect { |f| File.basename(f) }
+    @files = @files.reverse
   end
 
 private
