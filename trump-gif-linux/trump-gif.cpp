@@ -14,7 +14,6 @@ using std::string;
 static const int n_frames = 85;
 
 static const string frames_dir = R"(./frames/)";
-static const string output_dir = outputDirectory();
 
 cv::Mat left_page;
 cv::Mat right_page;
@@ -69,13 +68,13 @@ void applyMask(cv::Mat &dst, cv::Mat &src, cv::Mat &mask) {
 int main(int argc, char *argv[]) {
 
 	if (argc == 3 || argc == 4) {
-		printf("pages: %s %s\n", argv[1], argv[2]);
+		printf("\npages: %s %s\n", argv[1], argv[2]);
 		setLeftPageFileName(argv[1]);
 		setRightPageFileName(argv[2]);
 		if (argc == 4) {
-			printf("output dir: %s\n", argv[3]);
+			printf("\noutput file: %s\n", argv[3]);
+			setOutputFileName(argv[3]);
 		}
-		return 0;
 	}
 	else if (argc != 1) {
 		printf("invalid argument\n");
@@ -114,7 +113,7 @@ int main(int argc, char *argv[]) {
 	        if(!mask.data) { printf("cannot open mask %s\n", mask_name.str().c_str()); return -1; }
 
 		if (i == 1) {
-			if (!outputVideo.open(outputDirectory() + "output.avi",
+			if (!outputVideo.open(outputFileName(),
 				CV_FOURCC('D', 'I', 'V', 'X'),
 				//CV_FOURCC('X', '2', '6', '4'),
 				10, cv::Size(img.cols, img.rows))) {
@@ -146,9 +145,9 @@ int main(int argc, char *argv[]) {
 		applyMask(new_img, img, mask);
 
 		//
-		std::ostringstream ofname;
-		ofname << output_dir << "Layer " << i << ".png";
-		cv::imwrite(ofname.str(), new_img);
+		//std::ostringstream ofname;
+		//ofname << output_dir << "Layer " << i << ".png";
+		//cv::imwrite(ofname.str(), new_img);
 
 		outputVideo << new_img;
 	}

@@ -1,1 +1,26 @@
-hehe
+<div>
+
+Trump
+
+<br/>
+<br/>
+
+<%= image_tag('/images/output.gif') %>
+
+<br/>
+Upload size limit: 8m
+<br/>
+
+<%= form_tag({action: :upload}, multipart: true) do %>
+  <%= hidden_field_tag :uid, @uid %>
+  Page 1: <%= file_field_tag 'page_1' %>
+  <br/>
+  Page 2: <%= file_field_tag 'page_2' %>
+  <br/>
+  <br/>
+  <%= submit_tag("Upload & Generate") %>
+<% end %>
+<br/>
+TODO: allow customized size, color and compress
+<div>
+
