@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gifify output.avi --colors 255 --compress 100 --fps 10 --resize 300:-1 -o output.gif
+

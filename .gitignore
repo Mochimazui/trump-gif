@@ -9,6 +9,7 @@ example/*
 *.o
 *.png
 *.avi
+*.gif
 
 # User-specific files
 *.suo
