@@ -70,6 +70,23 @@ void applyMask(cv::Mat &dst, cv::Mat &src, cv::Mat &mask) {
 
 int trump_gif_main(int argc, char *argv[]) {
 
+	if (argc == 3 || argc == 4) {
+		printf("pages: %s %s\n", argv[1], argv[2]);
+		setLeftPageFileName(argv[1]);
+		setRightPageFileName(argv[2]);
+		if (argc == 4) {
+			printf("output dir: %s\n", argv[3]);
+		}
+		trump_gif_main(argc, argv);
+		return 0;
+	}
+	else if (argc != 1) {
+		printf("invalid argument\n");
+		printf("trump-gif left-page right-page [output-dir]\n");
+		return -1;
+	}
+
+	//
 	auto left_page = cv::imread(leftPageFileName());
 	auto right_page = cv::imread(rightPageFileName());
 
@@ -132,37 +149,4 @@ int trump_gif_main(int argc, char *argv[]) {
 	outputVideo.release();
 
 	return 0;
-}
-
-#include <QtWidgets/QApplication>
-#include "trumpgifmainwindow.h"
-
-int main(int argc, char *argv[]) {
-
-	// trump-gif left-page right-page output-dir
-	if (argc == 3 || argc == 4 ) {
-		printf("pages: %s %s\n", argv[1], argv[2]);
-		setLeftPageFileName(argv[1]);
-		setRightPageFileName(argv[2]);
-		if (argc == 4) {
-			printf("output dir: %s\n", argv[3]);
-		}
-		trump_gif_main(argc, argv);
-		return 0;
-	} else	if (argc != 1) {
-		printf("invalid argument\n");
-		printf("trump-gif left-page right-page [output-dir]\n");
-		return -1;
-	}
-
-	QApplication app(argc, argv);
-
-	TrumpGIFMainWindow main_window;
-	main_window.show();
-
-	auto ret =  app.exec();
-
-	trump_gif_main(argc, argv);
-
-	return ret;
 }
