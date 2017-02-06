@@ -1,0 +1,2 @@
+module TrumpHelper
+end
