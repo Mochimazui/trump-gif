@@ -4,8 +4,11 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 frames/*
+example/*
 *.out
 *.o
+*.png
+*.avi
 
 # User-specific files
 *.suo

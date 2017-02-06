@@ -13,15 +13,13 @@ using std::string;
 
 static const int n_frames = 85;
 
-static const string frames_dir = R"(E:\video\frames\)";
+static const string frames_dir = R"(./frames/)";
 static const string output_dir = outputDirectory();
 
-//static const string left_page_file_name = leftPageFileName();
-//static const string right_page_file_name = rightPageFileName();
+cv::Mat left_page;
+cv::Mat right_page;
 
-void transform(cv::Mat &bg, const std::string &file_name, float pos[][2]) {
-
-	auto img = cv::imread(file_name);
+void transform(cv::Mat &bg, cv::Mat &img, float pos[][2]) {
 
 	auto w = img.cols;
 	auto h = img.rows;
@@ -86,13 +84,18 @@ int main(int argc, char *argv[]) {
 	}
 
 	//
-	auto left_page = cv::imread(leftPageFileName());
-	auto right_page = cv::imread(rightPageFileName());
+	left_page = cv::imread(leftPageFileName());
+	right_page = cv::imread(rightPageFileName());
+
+        if(!left_page.data) { printf("cannot open left page\n"); return -1; }
+        if(!right_page.data) { printf("cannot open right page\n"); return -1; }
 
 	//
 	std::ostringstream rect_file_name;
 	rect_file_name << frames_dir << "0_rect.txt";
 	std::ifstream rect_fin(rect_file_name.str());
+	
+	if(!rect_fin) { printf("cannot open page rect file\n"); return -1; }
 
 	cv::VideoWriter outputVideo;
 	
@@ -107,10 +110,15 @@ int main(int argc, char *argv[]) {
 		mask_name << frames_dir << "Layer " << i << " mask.png";
 		cv::Mat mask = cv::imread(mask_name.str());
 
+        	if(!img.data) { printf("cannot open image %s\n", ifname.str().c_str()); return -1; }
+	        if(!mask.data) { printf("cannot open mask %s\n", mask_name.str().c_str()); return -1; }
+
 		if (i == 1) {
-			if (!outputVideo.open(R"(e:\video\output.avi)",
+			if (!outputVideo.open(outputDirectory() + "output.avi",
 				CV_FOURCC('D', 'I', 'V', 'X'),
+				//CV_FOURCC('X', '2', '6', '4'),
 				10, cv::Size(img.cols, img.rows))) {
+				printf("cannot open output video\n");
 				return -1;
 			}
 		}
@@ -132,8 +140,8 @@ int main(int argc, char *argv[]) {
 		img.copyTo(new_img);
 
 		//
-		transform(new_img, leftPageFileName(), pos);
-		transform(new_img, rightPageFileName(), pos + 4);
+		transform(new_img, left_page, pos);
+		transform(new_img, right_page, pos + 4);
 
 		applyMask(new_img, img, mask);
 

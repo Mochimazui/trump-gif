@@ -1,10 +1,10 @@
 
 #include "shared.h"
 
-static std::string s_left_page_file_name = R"(E:\video\you-1.jpg)";
-static std::string s_right_page_file_name = R"(E:\video\you-2.jpg)";
+static std::string s_left_page_file_name = R"(example/side-1.png)";
+static std::string s_right_page_file_name = R"(example/side-2.png)";
 
-static std::string s_output_directory = R"(E:\video\output\)";
+static std::string s_output_directory = R"(./)";
 
 std::string leftPageFileName() {
 	return s_left_page_file_name;
