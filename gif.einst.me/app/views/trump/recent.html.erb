@@ -1,8 +1,12 @@
 <div>
 <%= @count %>
 <br/>
+<br/>
 <% @files.each do |f| %>
-  <%= image_tag('/gif/' + f) %>
+  <%= f[:date].to_s %>
+  <br/>
+  <%= image_tag('/gif/' + f[:file]) %>
+  <br/>
   <br/>
 <% end %>
 </div>

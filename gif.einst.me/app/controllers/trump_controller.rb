@@ -59,7 +59,7 @@ class TrumpController < ApplicationController
     @files = Dir[Rails.root.join('public', 'gif').to_s + '/*.gif'].sort_by{ |f| File.mtime(f) }
     @count = @files.size
     @files = @files.last(10) 
-    @files = @files.collect { |f| File.basename(f) }
+    @files = @files.collect { |f| {file: File.basename(f), date: File.mtime(f)} }
     @files = @files.reverse
   end
 
