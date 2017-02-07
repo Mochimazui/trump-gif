@@ -2,16 +2,12 @@ class TrumpController < ApplicationController
 
   def index
     @uid = SecureRandom.hex
+    @options = params[:options] == '1'
   end
 
   def upload
-    #
     uid = params[:uid]
-
-    if uid.gsub(/\W+/, '') != uid 
-      # illegal uid
-      redirect_to trump_index_path and return
-    end
+    redirect_to trump_index_path and return if !check_uid(uid)
 
     page_1 = params[:page_1]
     page_2 = params[:page_2]
@@ -33,8 +29,12 @@ class TrumpController < ApplicationController
     FileUtils.rm_rf gif_file
     FileUtils.rm_rf txt_file
 
-    cmd = '/bin/bash /home/einst/src/trump-gif/generate ' + 
-      "#{page_1_file} #{page_2_file} #{video_file} #{gif_file} #{txt_file}"
+    colors = get_option(params[:colors], 255, 2, 255)
+    compress = get_option(params[:compress], 40, 0, 100)
+    width = get_option(params[:width], 250, 100, 400)
+
+    cmd = '/bin/bash /home/einst/src/trump-gif/generate_with_options ' + 
+      "#{page_1_file} #{page_2_file} #{video_file} #{colors} #{compress} #{width} #{gif_file} #{txt_file}"
     spawn(cmd)
 
     redirect_to trump_generate_path(uid: params[:uid])
@@ -42,27 +42,20 @@ class TrumpController < ApplicationController
 
   def generate
     @uid = params[:uid]
-    if @uid.gsub(/\W+/, '') != @uid 
-      redirect_to trump_index_path and return
-    end
+    redirect_to trump_index_path and return if !check_uid(@uid)
   end
   
   def generate_query
     uid = params[:uid]
-    if uid.gsub(/\W+/, '') != uid 
-      render :json => {finished: 0}
-      return
-    end
+    render :json => {finished: 0} and return if !check_uid(uid)
+    #
     txt_file = Rails.root.join('public', 'gif', uid + '.txt')
-    if txt_file.exist?
-      render :json => {finished: 1}
-    else
-      render :json => {finished: 0}
-    end
+    render :json => {finished: txt_file.exist? ? 1 : 0}
   end
 
   def recent
-    @files = Dir[Rails.root.join('public', 'gif').to_s + '/*'].sort_by{ |f| File.mtime(f) }
+    @files = Dir[Rails.root.join('public', 'gif').to_s + '/*.gif'].sort_by{ |f| File.mtime(f) }
+    @count = @files.size
     @files = @files.last(10) 
     @files = @files.collect { |f| File.basename(f) }
     @files = @files.reverse
@@ -77,6 +70,18 @@ private
       f.write(file.read)
     end
     return name
+  end
+
+  def check_uid(uid)
+    return uid.gsub(/\W+/, '') == uid 
+  end
+
+  def get_option(input, default, low, high)
+    return default if !input
+    input = input.to_i
+    return low if input < low
+    return high if input > high
+    return input
   end
 
 end

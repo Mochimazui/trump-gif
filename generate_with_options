@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# 1 page_1
+# 2 page_2
+# 3 video
+# 4 colors
+# 5 compress
+# 6 width
+# 7 gif
+# 8 txt
+
+cd /home/einst/src/trump-gif
+/home/einst/src/trump-gif/a.out $1 $2 $3
+gifify $3 --colors $4 --compress $5 --fps 10 --resize $6:-1 -o $7
+touch $8
+echo "finish"
+

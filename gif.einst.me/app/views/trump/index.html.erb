@@ -27,10 +27,34 @@
     <%= file_field_tag 'page_2', class: 'btn btn-default' %>
   </div>
   <br/>
+
+  <% if @options %>
+    <div class="input-group">
+      <label class="input-group-addon">Colors (2-255):</label>
+      <%= text_field_tag 'colors', '128', class: 'btn btn-default' %>
+    </div>
+    <br/>
+    <div class="input-group">
+      <label class="input-group-addon">Compress (0-100):</label>
+      <%= text_field_tag 'compress', '0', class: 'btn btn-default' %>
+    </div>
+    <br/>
+    <div class="input-group">
+      <label class="input-group-addon">Width (100-400):</label>
+      <%= text_field_tag 'width', '250', class: 'btn btn-default' %>
+    </div>
+    <br/>
+    <a href='/trump/index' class="btn btn-info btn-xs">Fewer options</a>
+    <br/>
+    <br/>
+  <% else %>
+    <a href='/trump/index?options=1' class="btn btn-info btn-xs">More options</a>
+    <br/>
+    <br/>
+  <% end %>
+  
   <%= submit_tag("Upload & Generate", class: 'btn btn-primary') %>
 <% end %>
-
-<!--<p>TODO: allow customized size, color and compress</p>-->
 
 </div>
 </div>
