@@ -28,11 +28,13 @@ class TrumpController < ApplicationController
     page_2_file = save_file(dir, page_2, 'page_2')
     video_file = Rails.root.join('tmp', 'gif', uid, 'output.avi')
     gif_file = Rails.root.join('public', 'gif', uid + '.gif')
+    txt_file = Rails.root.join('public', 'gif', uid + '.txt')
 
     FileUtils.rm_rf gif_file
+    FileUtils.rm_rf txt_file
 
     cmd = '/bin/bash /home/einst/src/trump-gif/generate ' + 
-      "#{page_1_file} #{page_2_file} #{video_file} #{gif_file}"
+      "#{page_1_file} #{page_2_file} #{video_file} #{gif_file} #{txt_file}"
     spawn(cmd)
 
     redirect_to trump_generate_path(uid: params[:uid])
@@ -40,6 +42,23 @@ class TrumpController < ApplicationController
 
   def generate
     @uid = params[:uid]
+    if @uid.gsub(/\W+/, '') != @uid 
+      redirect_to trump_index_path and return
+    end
+  end
+  
+  def generate_query
+    uid = params[:uid]
+    if uid.gsub(/\W+/, '') != uid 
+      render :json => {finished: 0}
+      return
+    end
+    txt_file = Rails.root.join('public', 'gif', uid + '.txt')
+    if txt_file.exist?
+      render :json => {finished: 1}
+    else
+      render :json => {finished: 0}
+    end
   end
 
   def recent

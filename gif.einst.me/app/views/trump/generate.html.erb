@@ -1,19 +1,84 @@
-<div>
-Generating...
-<br/>
-<br/>
-Try reloading after 10~20 seconds.
-<br/>
-I'll add auto reload later.
-<br/>
-<br/>
-Please DOWNLOAD the image after generation.
-<br/>
-It will be DELETED in one day to save server disk space.
-<br/>
-<br/>
-<a href="/">Gen another GIF</a>
-<br/>
-<br/>
-<%= image_tag('/gif/' + @uid + '.gif') %>
+<div class="container">
+
+<div class="page-header">
+  <h3 class="text-muted">TRUMP SIGN</h3>
 </div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= image_tag('/images/loading.gif', id: 'trump-gif') %>
+    <br/>
+    <p>Generating, please wait for 10~20 seconds :)</p>
+    <br/>
+    <p>Please DOWNLOAD the image after generation.</p>
+    <p>It will be DELETED in one day to save server disk space.</p>
+    <br/>
+    <a href="/" class="btn btn-info">Gen another GIF</a>
+  </div>
+</div>
+
+<script>
+
+function getURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
+var uid = getURLParameter('uid');
+var url = "/gif/" + uid + ".gif";
+ 
+function checkLater(delay) {
+  console.log(delay);
+  window.setTimeout(checkResult, delay);
+}
+
+function updateImage() {
+  console.log('update image: ' + url);
+  var img = document.getElementById("trump-gif");  
+  img.src = url;
+}
+
+function checkResult()
+{
+  var xhr = new XMLHttpRequest();
+  var query = '/trump/generate_query?uid=' + uid;
+  console.log(query);
+  xhr.open("GET", query, true);
+  xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        console.log('check result: 200');
+        console.log(xhr.response);
+        var res = JSON.parse(xhr.response);
+        console.log(res);
+        if(res['finished'] == 1) {
+          updateImage();
+        } else {
+          checkLater(3000);
+        }
+     } else {
+        checkLater(3000);
+      }
+    }
+  };
+  xhr.onerror = function (e) {
+    checkLater(3000);
+  };
+  xhr.send(null);
+}
+
+checkLater(5000);
+
+</script>
+
+</div>
+

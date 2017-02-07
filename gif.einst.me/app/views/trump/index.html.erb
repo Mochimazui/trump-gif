@@ -1,26 +1,40 @@
-<div>
+<div class="container">
 
-Trump
+<div class="page-header">
+  <h3 class="text-muted">TRUMP SIGN</h3>
+</div>
 
-<br/>
-<br/>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <%= image_tag('/images/output.gif') %>
+  </div>
+</div>
 
-<%= image_tag('/images/output.gif') %>
+<div class="panel panel-default">
+  <div class="panel-body">
 
-<br/>
-Upload size limit: 8m
-<br/>
+  <p>File size limit: 8m</p>
 
-<%= form_tag({action: :upload}, multipart: true) do %>
+<%= form_tag({action: :upload}, multipart: true, class: 'form-horizontal') do %>
   <%= hidden_field_tag :uid, @uid %>
-  Page 1: <%= file_field_tag 'page_1' %>
+  <div class="input-group">
+    <label class="input-group-addon">Page 1:</label>
+    <%= file_field_tag 'page_1', class: 'btn btn-default' %>
+  </div>
   <br/>
-  Page 2: <%= file_field_tag 'page_2' %>
+  <div class="input-group">
+    <label class="input-group-addon">Page 2:</label>
+    <%= file_field_tag 'page_2', class: 'btn btn-default' %>
+  </div>
   <br/>
-  <br/>
-  <%= submit_tag("Upload & Generate") %>
+  <%= submit_tag("Upload & Generate", class: 'btn btn-primary') %>
 <% end %>
-<br/>
-TODO: allow customized size, color and compress
-<div>
+
+<!--<p>TODO: allow customized size, color and compress</p>-->
+
+</div>
+</div>
+
+
+</div>
 
