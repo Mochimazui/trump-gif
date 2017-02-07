@@ -6,8 +6,9 @@ class TrumpController < ApplicationController
   end
 
   def upload
-    uid = params[:uid]
-    redirect_to trump_index_path and return if !check_uid(uid)
+    #uid = params[:uid]
+    #redirect_to trump_index_path and return if !check_uid(uid)
+    uid = SecureRandom.hex
 
     page_1 = params[:page_1]
     page_2 = params[:page_2]
@@ -37,7 +38,8 @@ class TrumpController < ApplicationController
       "#{page_1_file} #{page_2_file} #{video_file} #{colors} #{compress} #{width} #{gif_file} #{txt_file}"
     spawn(cmd)
 
-    redirect_to trump_generate_path(uid: params[:uid])
+    #redirect_to trump_generate_path(uid: params[:uid])
+    redirect_to trump_generate_path(uid: uid)
   end
 
   def generate
