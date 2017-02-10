@@ -62,7 +62,7 @@
     <ClCompile Include="shared.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="qt-main.cpp">
+    <ClCompile Include="main-qt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
